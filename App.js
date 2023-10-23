@@ -132,25 +132,46 @@ export default function App() {
           <Text style={styles.fiturText}>Akun</Text>
         </TouchableOpacity>
       </View>
+      <Text style={styles.iklanCategory}>Resep Untuk Sarapan</Text>
       <ScrollView horizontal style={styles.iklanContainer}>
         <View style={styles.iklanContainer2}>
-          <Text style={styles.iklanHeader}>Resep Untuk Sarapan</Text>
+          <Text style={styles.iklanHeader}>Resep Bubur 1</Text>
+          <Image style={styles.iklanImage} source={bubur} />
+          <Text style={styles.iklanTextHeader}>Masak sendiri lebih asyik</Text>
+          <Text style={styles.iklanTextSponsored}>Sarapan</Text>
+        </View>
+        <View style={styles.iklanContainer2}>
+          <Text style={styles.iklanHeader}>Resep Bubur 2</Text>
           <Image style={styles.iklanImage} source={bubur} />
           <Text style={styles.iklanTextHeader}>Masak sendiri lebih asyik</Text>
           <Text style={styles.iklanTextSponsored}>Sarapan</Text>
         </View>
       </ScrollView>
+      <Text style={styles.iklanCategory}>Resep Untuk Makan Siang</Text>
       <ScrollView horizontal style={styles.iklanContainer}>
         <View style={styles.iklanContainer2}>
-          <Text style={styles.iklanHeader}>Resep Untuk Makan Siang</Text>
+          <Text style={styles.iklanHeader}>Resep Gudeg 1</Text>
+          <Image style={styles.iklanImage} source={gudeg} />
+          <Text style={styles.iklanTextHeader}>Lebih Hemat</Text>
+          <Text style={styles.iklanTextSponsored}>Makan Siang</Text>
+        </View>
+        <View style={styles.iklanContainer2}>
+          <Text style={styles.iklanHeader}>Resep Gudeg 2</Text>
           <Image style={styles.iklanImage} source={gudeg} />
           <Text style={styles.iklanTextHeader}>Lebih Hemat</Text>
           <Text style={styles.iklanTextSponsored}>Makan Siang</Text>
         </View>
       </ScrollView>
+      <Text style={styles.iklanCategory}>Resep Untuk Makan Malam</Text>
       <ScrollView horizontal style={styles.iklanContainer}>
+      <View style={styles.iklanContainer2}>
+          <Text style={styles.iklanHeader}>Resep Sate Madura 1</Text>
+          <Image style={styles.iklanImage} source={sate} />
+          <Text style={styles.iklanTextHeader}>Lebih sehat</Text>
+          <Text style={styles.iklanTextSponsored}>Makan Malam</Text>
+        </View>
         <View style={styles.iklanContainer2}>
-          <Text style={styles.iklanHeader}>Resep Untuk Makan Malam</Text>
+          <Text style={styles.iklanHeader}>Resep Sate Madura 2</Text>
           <Image style={styles.iklanImage} source={sate} />
           <Text style={styles.iklanTextHeader}>Lebih sehat</Text>
           <Text style={styles.iklanTextSponsored}>Makan Malam</Text>
@@ -240,7 +261,7 @@ const styles = StyleSheet.create({
   },
 
   iklanContainer: {
-    marginTop: 16,
+    marginTop: 0,
     height: 300,
     marginHorizontal: 8,
   },
@@ -250,10 +271,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
 
+  iklanCategory: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 22,
+    marginTop: 15,
+    marginHorizontal: 14,
+  },
+
   iklanHeader: {
     color: 'black',
     fontWeight: '500',
-    fontSize: 22,
+    fontSize: 20,
   },
 
   iklanImage: {
@@ -267,7 +296,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 6,
     color: 'black',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
 
   iklanTextSponsored: {
