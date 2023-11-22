@@ -27,8 +27,9 @@ import logo from '../../assets/images/logo.png';
 import bubur from '../../assets/images/bubur.jpg';
 import gudeg from '../../assets/images/gudeg.jpeg';
 import sate from '../../assets/images/sate.jpg';
+import {useNavigation} from '@react-navigation/native';
 
-LogBox.ignoreAllLogs(true)
+LogBox.ignoreAllLogs(true);
 
 const win = Dimensions.get('window');
 
@@ -38,18 +39,23 @@ const Status = () => {
 
 export default function App() {
   const [choose, setChoose] = useState(1);
+  const nav = useNavigation();
   return (
     <ScrollView style={styles.container}>
       <Status />
       <View style={styles.header}></View>
       <Image style={styles.logoHeader} source={logo} />
-      <View style={styles.searchContainer}>
+      <TouchableOpacity
+        style={styles.searchContainer}
+        onPress={() => nav.navigate('Discover')}>
         <SearchNormal1 variant="Linear" color="grey" style={{marginLeft: 12}} />
-        <TextInput
+        <Text
           style={styles.search}
           placeholder="Cari Resep"
-          placeholderTextColor={'grey'}></TextInput>
-      </View>
+          placeholderTextColor={'grey'}>
+          Cari Resep
+        </Text>
+      </TouchableOpacity>
       <View style={styles.categoryContainer}>
         <TouchableOpacity
           style={[
@@ -168,7 +174,7 @@ export default function App() {
       </ScrollView>
       <Text style={styles.iklanCategory}>Resep Untuk Makan Malam</Text>
       <ScrollView horizontal style={styles.iklanContainer}>
-      <View style={styles.iklanContainer2}>
+        <View style={styles.iklanContainer2}>
           <Text style={styles.iklanHeader}>Resep Sate Madura 1</Text>
           <Image style={styles.iklanImage} source={sate} />
           <Text style={styles.iklanTextHeader}>Lebih sehat</Text>

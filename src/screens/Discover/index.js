@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   Dimensions,
   ScrollView,
@@ -11,6 +11,7 @@ import {
   Touchable,
   TouchableOpacity,
   LogBox,
+  Animated,
 } from 'react-native';
 import {
   SearchNormal1,
@@ -37,45 +38,79 @@ const Status = () => {
 };
 
 export default function App() {
-  const [choose, setChoose] = useState(1);
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const translateY = scrollY.interpolate({
+    inputRange: [0, 45],
+    outputRange: [0, -20],
+  });
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <Status />
-      <View style={styles.header}></View>
-      <Image style={styles.logoHeader} source={logo} />
-      <View style={styles.searchContainer}>
+      <Animated.View
+        style={[
+          styles.header,
+          {transform: [{translateY: translateY}]},
+        ]}></Animated.View>
+      <Animated.Image
+        style={[styles.logoHeader, {transform: [{translateY: translateY}]}]}
+        source={logo}
+      />
+      <Animated.View
+        style={[
+          styles.searchContainer,
+          {transform: [{translateY: translateY}]},
+        ]}>
         <SearchNormal1 variant="Linear" color="grey" style={{marginLeft: 12}} />
         <TextInput
           style={styles.search}
           placeholder="Cari Resep"
           placeholderTextColor={'grey'}></TextInput>
-      </View>
-      <Text style={styles.iklanCategory}>Pencarian Resep</Text>
-      <View style={styles.iklanContainer2}>
-        <Text style={styles.iklanHeader}>Resep Bubur 1</Text>
-        <Image style={styles.iklanImage} source={bubur} />
-        <Text style={styles.iklanTextHeader}>Masak sendiri lebih asyik</Text>
-        <Text style={styles.iklanTextSponsored}>Sarapan</Text>
-      </View>
-      <View style={styles.iklanContainer2}>
-        <Text style={styles.iklanHeader}>Resep Bubur 1</Text>
-        <Image style={styles.iklanImage} source={bubur} />
-        <Text style={styles.iklanTextHeader}>Masak sendiri lebih asyik</Text>
-        <Text style={styles.iklanTextSponsored}>Sarapan</Text>
-      </View>
-      <View style={styles.iklanContainer2}>
-        <Text style={styles.iklanHeader}>Resep Bubur 1</Text>
-        <Image style={styles.iklanImage} source={bubur} />
-        <Text style={styles.iklanTextHeader}>Masak sendiri lebih asyik</Text>
-        <Text style={styles.iklanTextSponsored}>Sarapan</Text>
-      </View>
-      <View style={styles.iklanContainer2}>
-        <Text style={styles.iklanHeader}>Resep Bubur 1</Text>
-        <Image style={styles.iklanImage} source={bubur} />
-        <Text style={styles.iklanTextHeader}>Masak sendiri lebih asyik</Text>
-        <Text style={styles.iklanTextSponsored}>Sarapan</Text>
-      </View>
-    </ScrollView>
+      </Animated.View>
+      <Animated.Text
+        style={[styles.iklanCategory, {transform: [{translateY: translateY}]}]}>
+        Pencarian Resep
+      </Animated.Text>
+      <Animated.ScrollView
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: scrollY}}}],
+          {useNativeDriver: true},
+        )}
+        style={{marginBottom: -42,
+          transform: [
+            {
+              translateY: scrollY.interpolate({
+                inputRange: [0, 142],
+                outputRange: [0, -50],
+              }),
+            },
+          ],
+        }}>
+        <View style={styles.iklanContainer2}>
+          <Text style={styles.iklanHeader}>Resep Bubur 1</Text>
+          <Image style={styles.iklanImage} source={bubur} />
+          <Text style={styles.iklanTextHeader}>Masak sendiri lebih asyik</Text>
+          <Text style={styles.iklanTextSponsored}>Sarapan</Text>
+        </View>
+        <View style={styles.iklanContainer2}>
+          <Text style={styles.iklanHeader}>Resep Bubur 1</Text>
+          <Image style={styles.iklanImage} source={bubur} />
+          <Text style={styles.iklanTextHeader}>Masak sendiri lebih asyik</Text>
+          <Text style={styles.iklanTextSponsored}>Sarapan</Text>
+        </View>
+        <View style={styles.iklanContainer2}>
+          <Text style={styles.iklanHeader}>Resep Bubur 1</Text>
+          <Image style={styles.iklanImage} source={bubur} />
+          <Text style={styles.iklanTextHeader}>Masak sendiri lebih asyik</Text>
+          <Text style={styles.iklanTextSponsored}>Sarapan</Text>
+        </View>
+        <View style={styles.iklanContainer2}>
+          <Text style={styles.iklanHeader}>Resep Bubur 1</Text>
+          <Image style={styles.iklanImage} source={bubur} />
+          <Text style={styles.iklanTextHeader}>Masak sendiri lebih asyik</Text>
+          <Text style={styles.iklanTextSponsored}>Sarapan</Text>
+        </View>
+      </Animated.ScrollView>
+    </View>
   );
 }
 
