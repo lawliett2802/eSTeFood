@@ -13,6 +13,7 @@ import {
   LogBox,
 } from 'react-native';
 import {
+  AddCircle,
   SearchNormal1,
   NotificationCircle,
   Sun1,
@@ -129,9 +130,11 @@ export default function App() {
           <Book1 size={54} variant="Linear" color="black" />
           <Text style={styles.fiturText}>Resep</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.fiturContainer2}>
-          <People size={54} variant="Linear" color="black" />
-          <Text style={styles.fiturText}>Komunitas</Text>
+        <TouchableOpacity
+          style={styles.fiturContainer2}
+          onPress={() => nav.navigate('AddResep')}>
+          <AddCircle size={54} variant="Linear" color="black" />
+          <Text style={styles.fiturText}>Tambah Resep</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.fiturContainer2}>
           <Star size={54} variant="Linear" color="black" />

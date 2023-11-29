@@ -1,7 +1,7 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import {Account, Discover} from './src/screens';
+import {Account, AddResep, Discover} from './src/screens';
 import Home from './src/screens/Home';
 import {Book1, User} from 'iconsax-react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -66,6 +66,11 @@ export default function App() {
           options={{headerShown: false}}
           name="Discover"
           component={Discover}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="AddResep"
+          component={AddResep}
         />
       </Stack.Navigator>
     </NavigationContainer>
