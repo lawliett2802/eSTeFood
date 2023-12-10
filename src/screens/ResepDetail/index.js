@@ -5,26 +5,31 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
 } from 'react-native';
 import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
-
+import {useNavigation, useRoute} from '@react-navigation/native';
+const win = Dimensions.get('window');
 const winWidht = Dimensions.get('screen').width;
 const winHeight = Dimensions.get('screen').height;
 
 export default function AddResep() {
   const nav = useNavigation();
-  const [inputTitle, setInputTitle] = useState();
-  const [inputDesc, setInputDesc] = useState();
-  const [inputImage, setInputImage] = useState();
-  const [inputName, setInputName] = useState();
+  const route = useRoute();
+  const [resep, setResep] = useState([]);
+  const [inputTitle, setInputTitle] = useState(route.params?.data.title);
+  const [inputDesc, setInputDesc] = useState(route.params?.data.desc);
+  const [inputImage, setInputImage] = useState(route.params?.data.image);
+  const [inputName, setInputName] = useState(route.params?.data.name);
 
-  async function postData() {
+  async function putData() {
     try {
+      var id = route.params?.data.id;
       const data = await fetch(
-        'https://65645833ceac41c0761df458.mockapi.io/este/resep',
+        'https://65645833ceac41c0761df458.mockapi.io/este/resep/' + id,
         {
-          method: 'POST',
+          method: 'PUT',
+
           headers: {
             'Content-type': 'application/json',
           },
@@ -37,7 +42,9 @@ export default function AddResep() {
         },
       );
       console.log(await data.json());
+      console.log(id);
       nav.navigate('Home');
+      setResep(res);
     } catch (e) {
       console.log(e);
     }
@@ -45,26 +52,29 @@ export default function AddResep() {
   return (
     <View style={styles.container}>
       <View style={styles.cardHeader}>
-        <Text style={styles.headerText}>Tambahkan Resep</Text>
+        <Text style={styles.headerText}>Tampilan Resep</Text>
       </View>
       <View style={styles.cardContent}>
         <TextInput
+          editable={false}
           style={styles.cardTextInput}
-          autoFocus
+          // autoFocus
           value={inputTitle}
           onChangeText={text => setInputTitle(text)}
           placeholder="Judul Resep"
           placeholderTextColor="#DDD"
         />
         <TextInput
+          editable={false}
           style={styles.cardTextInput}
-          autoFocus
+          // autoFocus
           value={inputImage}
           onChangeText={text => setInputImage(text)}
           placeholder="Gambar Makanan"
           placeholderTextColor="#DDD"
         />
         <TextInput
+          editable={false}
           style={styles.cardTextInput}
           multiline
           numberOfLines={3}
@@ -74,7 +84,9 @@ export default function AddResep() {
           placeholder="Deskripsi Singkat"
           placeholderTextColor="#DDD"
         />
+        <Image style={styles.iklanImage} source={{uri: inputImage}} />
         <TextInput
+          editable={false}
           style={styles.cardTextInput}
           multiline
           numberOfLines={6}
@@ -86,8 +98,15 @@ export default function AddResep() {
         />
       </View>
       <View style={styles.cardFooter}>
-        <TouchableOpacity style={styles.cardButton} onPress={postData}>
-          <Text style={styles.buttonText}>Simpan</Text>
+          <TouchableOpacity
+            style={styles.cardButton}
+            onPress={() => nav.navigate('EditResep', {data})}>
+            <Text style={styles.buttonText}>Edit</Text>
+          </TouchableOpacity>
+      </View>
+      <View style={styles.cardFooter}>
+        <TouchableOpacity style={styles.cardButton} onPress={putData}>
+          <Text style={styles.buttonText}>Delete</Text>
         </TouchableOpacity>
       </View>
     </View>

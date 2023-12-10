@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   Dimensions,
   ScrollView,
@@ -11,6 +11,7 @@ import {
   Touchable,
   TouchableOpacity,
   LogBox,
+  RefreshControl,
 } from 'react-native';
 import {
   AddCircle,
@@ -40,7 +41,46 @@ const Status = () => {
 
 export default function App() {
   const [choose, setChoose] = useState(1);
+  const [resep, setResep] = useState([]);
   const nav = useNavigation();
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      const data = await fetch(
+        'https://65645833ceac41c0761df458.mockapi.io/este/resep',
+      );
+      const res = await data.json();
+      console.log(res);
+      setResep(res);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      firestore()
+        .collection('blog')
+        .onSnapshot(querySnapshot => {
+          const blogs = [];
+          querySnapshot.forEach(documentSnapshot => {
+            blogs.push({
+              ...documentSnapshot.data(),
+              id: documentSnapshot.id,
+            });
+          });
+          setBlogData(blogs);
+        });
+      setRefreshing(false);
+    }, 1500);
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       <Status />
@@ -125,7 +165,11 @@ export default function App() {
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.fiturContainer}>
+      <View
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        style={styles.fiturContainer}>
         <TouchableOpacity style={styles.fiturContainer2}>
           <Book1 size={54} variant="Linear" color="black" />
           <Text style={styles.fiturText}>Resep</Text>
@@ -176,19 +220,18 @@ export default function App() {
         </View>
       </ScrollView>
       <Text style={styles.iklanCategory}>Resep Untuk Makan Malam</Text>
+
       <ScrollView horizontal style={styles.iklanContainer}>
-        <View style={styles.iklanContainer2}>
-          <Text style={styles.iklanHeader}>Resep Sate Madura 1</Text>
-          <Image style={styles.iklanImage} source={sate} />
-          <Text style={styles.iklanTextHeader}>Lebih sehat</Text>
-          <Text style={styles.iklanTextSponsored}>Makan Malam</Text>
-        </View>
-        <View style={styles.iklanContainer2}>
-          <Text style={styles.iklanHeader}>Resep Sate Madura 2</Text>
-          <Image style={styles.iklanImage} source={sate} />
-          <Text style={styles.iklanTextHeader}>Lebih sehat</Text>
-          <Text style={styles.iklanTextSponsored}>Makan Malam</Text>
-        </View>
+        {resep.map(item => (
+          <TouchableOpacity
+            style={styles.iklanContainer2}
+            onPress={() => nav.navigate('EditResep', {data: item})}>
+            <Text style={styles.iklanHeader}>{item.title}</Text>
+            <Image style={styles.iklanImage} source={{uri: item.image}} />
+            <Text style={styles.iklanTextHeader}>{item.name}</Text>
+            <Text style={styles.iklanTextSponsored}>{item.desc}</Text>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
     </ScrollView>
   );

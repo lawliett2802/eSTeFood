@@ -3,4 +3,6 @@ import Discover from "./Discover";
 import Splash from "./Splash";
 import Account from "./Account";
 import AddResep from "./AddResep";
-export {Home, Discover, Splash, Account, AddResep}
+import EditResep from "./EditResep";
+import ResepDetail from "./ResepDetail";
+export {Home, Discover, Splash, Account, AddResep,EditResep, ResepDetail}

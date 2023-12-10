@@ -5,26 +5,29 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
 } from 'react-native';
 import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
-
+import {useNavigation, useRoute} from '@react-navigation/native';
+const win = Dimensions.get('window');
 const winWidht = Dimensions.get('screen').width;
 const winHeight = Dimensions.get('screen').height;
 
 export default function AddResep() {
   const nav = useNavigation();
-  const [inputTitle, setInputTitle] = useState();
-  const [inputDesc, setInputDesc] = useState();
-  const [inputImage, setInputImage] = useState();
-  const [inputName, setInputName] = useState();
+  const route = useRoute();
+  const [inputTitle, setInputTitle] = useState(route.params?.data.title);
+  const [inputDesc, setInputDesc] = useState(route.params?.data.desc);
+  const [inputImage, setInputImage] = useState(route.params?.data.image);
+  const [inputName, setInputName] = useState(route.params?.data.name);
 
-  async function postData() {
+  async function putData() {
     try {
+      var id = route.params?.data.id;
       const data = await fetch(
-        'https://65645833ceac41c0761df458.mockapi.io/este/resep',
+        'https://65645833ceac41c0761df458.mockapi.io/este/resep/' + id,
         {
-          method: 'POST',
+          method: 'PUT',
           headers: {
             'Content-type': 'application/json',
           },
@@ -37,15 +40,43 @@ export default function AddResep() {
         },
       );
       console.log(await data.json());
+      console.log(id);
       nav.navigate('Home');
     } catch (e) {
       console.log(e);
     }
   }
+
+  async function deleteData() {
+    try {
+      var id = route.params?.data.id;
+      const data = await fetch(
+        'https://65645833ceac41c0761df458.mockapi.io/este/resep/' + id,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: inputTitle,
+            image: inputImage,
+            desc: inputDesc,
+            name: inputName,
+          }),
+        },
+      );
+      console.log(await data.json());
+      console.log(id);
+      nav.navigate('Home');
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.cardHeader}>
-        <Text style={styles.headerText}>Tambahkan Resep</Text>
+        <Text style={styles.headerText}>Edit Resep</Text>
       </View>
       <View style={styles.cardContent}>
         <TextInput
@@ -56,6 +87,7 @@ export default function AddResep() {
           placeholder="Judul Resep"
           placeholderTextColor="#DDD"
         />
+        <Image style={styles.iklanImage} source={{uri: inputImage}} />
         <TextInput
           style={styles.cardTextInput}
           autoFocus
@@ -86,8 +118,13 @@ export default function AddResep() {
         />
       </View>
       <View style={styles.cardFooter}>
-        <TouchableOpacity style={styles.cardButton} onPress={postData}>
+        <TouchableOpacity style={styles.cardButton} onPress={putData}>
           <Text style={styles.buttonText}>Simpan</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.cardFooter}>
+        <TouchableOpacity style={styles.cardButton} onPress={deleteData}>
+          <Text style={styles.buttonText}>Delete</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -156,5 +193,11 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  iklanImage: {
+    marginTop: 6,
+    borderRadius: 15,
+    width: win.width - 64,
+    height: 212,
   },
 });
