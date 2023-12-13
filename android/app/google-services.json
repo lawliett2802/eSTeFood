@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "9303089977",
+    "project_id": "estefood-1651c",
+    "storage_bucket": "estefood-1651c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:9303089977:android:8a0e1c23f5450b8e8c7ee8",
+        "android_client_info": {
+          "package_name": "com.estefood"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC340p5TqOkSHHoQbxiTfdsyTi5Vjmr_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

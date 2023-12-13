@@ -24,12 +24,12 @@ import {
   Star,
   User,
 } from 'iconsax-react-native';
-import {Navigation} from 'react-native-navigation';
 import logo from '../../assets/images/logo.png';
 import bubur from '../../assets/images/bubur.jpg';
 import gudeg from '../../assets/images/gudeg.jpeg';
-import sate from '../../assets/images/sate.jpg';
 import {useNavigation} from '@react-navigation/native';
+import storage from '@react-native-firebase/storage';
+import firestore from '@react-native-firebase/firestore';
 
 LogBox.ignoreAllLogs(true);
 
@@ -46,36 +46,35 @@ export default function App() {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    fetchData();
+    const subscriber = firestore()
+      .collection('resep')
+      .onSnapshot(querySnapshot => {
+        const reseps = [];
+        querySnapshot.forEach(documentSnapshot => {
+          reseps.push({
+            ...documentSnapshot.data(),
+            id: documentSnapshot.id,
+          });
+        });
+        setResep(reseps);
+      });
+    return () => subscriber();
   }, []);
-
-  async function fetchData() {
-    try {
-      const data = await fetch(
-        'https://65645833ceac41c0761df458.mockapi.io/este/resep',
-      );
-      const res = await data.json();
-      console.log(res);
-      setResep(res);
-    } catch (e) {
-      console.log(e);
-    }
-  }
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
       firestore()
-        .collection('blog')
+        .collection('resep')
         .onSnapshot(querySnapshot => {
-          const blogs = [];
+          const reseps = [];
           querySnapshot.forEach(documentSnapshot => {
-            blogs.push({
+            reseps.push({
               ...documentSnapshot.data(),
               id: documentSnapshot.id,
             });
           });
-          setBlogData(blogs);
+          setResep(reseps);
         });
       setRefreshing(false);
     }, 1500);
@@ -225,7 +224,7 @@ export default function App() {
         {resep.map(item => (
           <TouchableOpacity
             style={styles.iklanContainer2}
-            onPress={() => nav.navigate('EditResep', {data: item})}>
+            onPress={() => nav.navigate('EditResep', {resepId: item.id})}>
             <Text style={styles.iklanHeader}>{item.title}</Text>
             <Image style={styles.iklanImage} source={{uri: item.image}} />
             <Text style={styles.iklanTextHeader}>{item.name}</Text>
