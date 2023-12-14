@@ -18,8 +18,24 @@ import {
   Message,
 } from 'iconsax-react-native';
 import profile from '../../assets/images/kobo.jpg';
+import {useNavigation} from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
+import {formatNumber} from '../../utils/formatNumber';
+import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {formatDate} from '../../utils/formatDate';
 
 export default function Account() {
+  const navigation = useNavigation();
+   const handleLogout = async () => {
+    try {
+      await auth().signOut();
+      await AsyncStorage.removeItem('userData');
+      navigation.replace('Login');
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <ScrollView style={styles.container}>
       <StatusBar translucent backgroundColor={'rgba(0,0,0,0)'}></StatusBar>
@@ -58,7 +74,7 @@ export default function Account() {
             <Text style={styles.menuText}>Saran dan Masukkan</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonSignOut}>
+        <TouchableOpacity onPress={handleLogout} style={styles.buttonSignOut}>
           <Text style={styles.buttonText}>Keluar</Text>
         </TouchableOpacity>
       </View>
